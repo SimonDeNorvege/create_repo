@@ -25,7 +25,7 @@ then
     then
         echo "Which git?"
         read
-        git clone git@github.com:$REPLY/$1 #/!\ Change the name! /!\
+        git clone git@github.com:$REPLY/$1
     else
         mkdir $1
     fi
