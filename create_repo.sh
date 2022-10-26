@@ -1,8 +1,8 @@
 #/bin/bash
 
-function packing {
+function packing { #fonction de remplissage de fichier
 
-IFS='.' #Internal Field Seperator S pour couper le nom du fichier
+IFS='.' #Internal Field Seperator pour couper le nom du fichier
 
 if [ "$1" = "Makefile" ]
 then
