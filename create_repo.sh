@@ -6,9 +6,9 @@ IFS='.' #Internal Field Seperator pour couper le nom du fichier
 
 if [ "$1" = "Makefile" ]
 then
+    set $1
     packing_makefile  #Makefile
 else
-    set $1 #reduit le nom du fichier pour avoir juste apres le point
     if [ "$2" = "c" ] # $2 représente ce qui est écrit après le point
     then
         packing_C #C
@@ -28,22 +28,28 @@ fi
 Comment
 
 function packing_makefile { #fonction de remplissage de Makefile 
+echo "##\n## PROJECT, 2022\n## Makefile\n## File description:\n## libtest\n##" >> Makefile
 return
 }
 
 function packing_C { #fonction de remplissage des fichiers C
+echo "C : $file_name"
 return
 }
 
 function packing_java { #fonction de remplissage du fichier Java
+echo "Java : $file_name"
 return
 }
 
 function packing_sh { #fonction de remplissage du fichier Bash
+echo "Bash : $name"
 return
 }
 
 # the file packing ends here
+
+# /!\ start of the function /!\
 
 if [ "$1" = "-h" ]
 then
@@ -54,28 +60,39 @@ then
     return 0
 fi
 
-name=false
+project_name="False"
 
 if ! [ -z "$1" ] # if there is no project name, the program will only do the bare minimum
 then
-    name=true
+    project_name=$1
 fi
 
-if [ name=true ] 
+# echo "le premier arguent est : [$1]"
+
+if [ "$project_name" != "False" ] 
 then
     echo "Clone from git?"
-    read 
+    read $REPLY
 
     if [ $REPLY = "y" -o $REPLY == "Y" ]
     then
         echo "Which git?"
-        read
-        git clone git@github.com:$REPLY/$1
-    else
-        mkdir $1
+        read file_name #FINALLY
+        git clone git@github.com:$file_name/$project_name
+        # echo "command : git@github.com:$file_name/$project_name"
+        if [ ! -e "$1" ] #a regler?
+        then
+            echo $1
+            mkdir $1 # au cas au git ne marche pas
+            echo "Hasn't been able to connect to your git repository, creating one"
+            cd $1
+        else
+            cd $project_name
+        fi
     fi
-
-    cd $1 #Go in the newly created folder
+else
+    mkdir Project_folder
+    cd Project_folder #Go in the newly created folder
 fi
 
 #Creation of folders
@@ -121,7 +138,6 @@ then
     echo "The projet is in which language?"
     read
 
-    echo "$REPLY"
     if [ $REPLY = "c" -o $REPLY = "C" ]
     then #C project
         touch include/$1.h #!Creation of .h
@@ -155,4 +171,3 @@ fi
 
 
 echo "done!"
-return 0
