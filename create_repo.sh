@@ -27,23 +27,112 @@ fi
     that fill the files created during the repository creation
 Comment
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function packing_makefile { #fonction de remplissage de Makefile 
-echo "##\n## PROJECT, 2022\n## Makefile\n## File description:\n## libtest\n##" >> Makefile
-return
+echo "##" > Makefile
+echo "## PROJECT, 2022" >> Makefile
+echo "## Makefile" >> Makefile
+echo "## File description:" >> Makefile
+echo "## $project_name" >> Makefile
+echo "##" >> Makefile
+echo >> Makefile
+if [ $operand = "c" ] # C project
+then
+    echo "SRC = $project_name.c" >> Makefile
+    echo >> Makefile
+    echo "NAME = $project_name" >> Makefile
+    echo >> Makefile
+    echo "OBJ = \$(SRC:.c=.o)" >> Makefile
+    echo >> Makefile
+    echo "CFLAGS =	-W -Wall -std=gnu11 -Wextra -I include/ -g" >> Makefile
+    echo >> Makefile
+    echo "all: 	\$(NAME)" >> Makefile
+    echo >> Makefile 
+    echo "\$(NAME): \$(OBJ)" >> Makefile
+    echo "	gcc -o \$(NAME) \$(OBJ) \$(CFLAGS)" >> Makefile
+    echo >> Makefile
+    return
+
+elif [ $operand = "java" ] # Java Project
+then
+    rm Makefile
+elif [ $operand = "bash" ] # Bash Project
+then
+    rm Makefile
+fi
 }
 
 function packing_C { #fonction de remplissage des fichiers C
-echo "C : $file_name"
+echo "Writing in C file..."
+echo "/*" > src/$project_name.c
+echo "** PROJECT, 2022" >> src/$project_name.c
+echo "** $project_name.c" >> src/$project_name.c
+echo "** File description:" >> src/$project_name.c
+echo "** $project_name" >> src/$project_name.c
+echo "*/" >> src/$project_name.c
+echo >> src/$project_name.c
+echo "int main(int argc, char **argv)" >> src/$project_name.c
+echo "{" >> src/$project_name.c
+echo >> src/$project_name.c
+echo "}" >> src/$project_name.c
+
+echo "Writing in Header file..."
+echo "/*" > include/$project_name.h
+echo "** PROJECT, 2022" >> include/$project_name.h
+echo "** $project_name.h" >> include/$project_name.h
+echo "** File description:" >> include/$project_name.h
+echo "** $project_name" >> include/$project_name.h
+echo "*/" >> include/$project_name.h
+echo >> include/$project_name.h
+echo "#ifndef $project_name" >> include/$project_name.h
+echo "#define $project_name" >> include/$project_name.h
+echo >> include/$project_name.h
+echo "#endif /* ! $project_name */" >> include/$project_name.h
+
 return
 }
 
 function packing_java { #fonction de remplissage du fichier Java
-echo "Java : $file_name"
-return
+echo "Writing in java file..."
+echo "/*" > src/$project_name.java
+echo "** PROJECT, 2022" >> src/$project_name.java
+echo "** $project_name.java" >> src/$project_name.java
+echo "** File description:" >> src/$project_name.java
+echo "** $project_name" >> src/$project_name.java
+echo "*/" >> src/$project_name.java
+echo
 }
 
 function packing_sh { #fonction de remplissage du fichier Bash
-echo "Bash : $name"
+echo "Writing in bash file..."
+echo "#/bin/bash" > src/$project_name.sh
+echo
 return
 }
 
@@ -53,14 +142,18 @@ return
 
 if [ "$1" = "-h" ]
 then
-    echo ""
-    echo "Prepares your GitHub repository : Java/C/Bash projects :" 
-    echo "\$1 is the project name"
-    echo ""
-    return 0
+    echo
+    echo "/                                                        \\"
+    echo "|Prepares your GitHub repository : Java/C/Bash projects :|" 
+    echo "|\$1 is the project name                                  |"
+    echo "\\                                                        /"
+    echo
+    exit 0
 fi
 
 project_name="False"
+
+# Pull the folder from the git
 
 if ! [ -z "$1" ] # if there is no project name, the program will only do the bare minimum
 then
@@ -79,13 +172,12 @@ then
         echo "Which git?"
         read file_name #FINALLY
         git clone git@github.com:$file_name/$project_name
-        # echo "command : git@github.com:$file_name/$project_name"
-        if [ ! -e "$1" ] #a regler?
+        if [ ! -e "$project_name" ]
         then
-            echo $1
-            mkdir $1 # au cas au git ne marche pas
+            echo $project_name
+            mkdir $project_name # au cas au git ne marche pas
             echo "Hasn't been able to connect to your git repository, creating one"
-            cd $1
+            cd $project_name
         else
             cd $project_name
         fi
@@ -96,6 +188,7 @@ else
 fi
 
 #Creation of folders
+
 if [ -e src ]
 then
     echo "le dossier 'src' existe déjà"
@@ -129,41 +222,47 @@ fi
 #Creation of Makefile
 touch Makefile
 
-#Packing of Makefile
-packing Makefile
-
 # Check si le nom du projet à été donné
 if [ name=true ]
 then
     echo "The projet is in which language?"
-    read
+    read operand
 
-    if [ $REPLY = "c" -o $REPLY = "C" ]
+    #Packing of Makefile
+    packing Makefile
+
+    if [ $operand = "c" -o $operand = "C" ]
     then #C project
-        touch include/$1.h #!Creation of .h
-        touch src/$1.c #!Creation of .c
+        operand='c'
 
+        touch include/$project_name.h #!Creation of .h
+        touch src/$project_name.c #!Creation of .c
+        
         #Packing of src
-        packing src/$1.c
+        packing_C src/$project_name.c
 
-    elif [ $REPLY = "java" -o $REPLY = "Java" ]
+    elif [ $operand = "java" -o $operand = "Java" ]
     then #Java project
-        touch src/$1.java #!Creation of .java
+        operand="java"
+
+        touch src/$project_name.java #!Creation of .java
 
         #Packing of src
-        packing src/$1.java
+        packing_java src/$project_name.java
 
-    elif [ $REPLY = "bash" -o $REPLY = "Bash" -o $REPLY = "sh"]
+    elif [ $operand = "bash" -o $operand = "Bash" -o $operand = "sh" ]
     then #Bash project
-        touch src/$1.sh #Creation of .sh
+        operand="sh"
+
+        touch src/$project_name.sh #Creation of .sh
 
         #Packing of src
-        packing src/$1.sh
+        packing_sh src/$project_name.sh
 
     else
         echo "Je ne connais pas encore ce language!" #Erreur 
 
-    fi
+    fi  
 else 
     echo "Les fichiers n'ont pas été crées"
 fi
