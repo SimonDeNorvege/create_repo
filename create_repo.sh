@@ -27,33 +27,6 @@ fi
     that fill the files created during the repository creation
 Comment
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function packing_makefile { #fonction de remplissage de Makefile 
 echo "##" > Makefile
 echo "## PROJECT, 2022" >> Makefile
@@ -62,7 +35,8 @@ echo "## File description:" >> Makefile
 echo "## $project_name" >> Makefile
 echo "##" >> Makefile
 echo >> Makefile
-if [ $operand = "c" ] # C project
+
+if [ $operand = "c" -o $operand = "C" ] # C project
 then
     echo "SRC = $project_name.c" >> Makefile
     echo >> Makefile
@@ -79,10 +53,10 @@ then
     echo >> Makefile
     return
 
-elif [ $operand = "java" ] # Java Project
+elif [ $operand = "Java" ] # Java Project
 then
     rm Makefile
-elif [ $operand = "bash" ] # Bash Project
+elif [ $operand = "Bash" ] # Bash Project
 then
     rm Makefile
 fi
@@ -145,7 +119,7 @@ then
     echo
     echo "/                                                        \\"
     echo "|Prepares your GitHub repository : Java/C/Bash projects :|" 
-    echo "|\$1 is the project name                                  |"
+    echo "|\$1 is required and is the project name                                  |"
     echo "\\                                                        /"
     echo
     exit 0
@@ -233,7 +207,7 @@ then
 
     if [ $operand = "c" -o $operand = "C" ]
     then #C project
-        operand='c'
+        operand="c"
 
         touch include/$project_name.h #!Creation of .h
         touch src/$project_name.c #!Creation of .c
