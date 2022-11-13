@@ -4,8 +4,9 @@
 
 # Packing of
 {
-    Makefile
     src
     include
     lib/my (if C or Java)
 }
+
+# Bugs Solving
