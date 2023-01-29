@@ -31,7 +31,7 @@ function packing_makefile { #fonction de remplissage de Makefile
 
 echo "##" > Makefile
 echo -n "## PROJECT, " >> Makefile
-date +"%d %m %Y" >> Makefile
+date +" %d %m %Y" >> Makefile
 echo "## Makefile" >> Makefile
 echo "## File description:" >> Makefile
 echo "## $project_name" >> Makefile
@@ -67,7 +67,8 @@ fi
 function packing_C { #fonction de remplissage des fichiers C
 echo "Writing in C file..."
 echo "/*" > src/$project_name.c
-echo "** PROJECT, 2022" >> src/$project_name.c
+echo -n "** PROJECT, " >> src/$project_name.c
+date +" %d %m %Y" >> src/$project_name.c
 echo "** $project_name.c" >> src/$project_name.c
 echo "** File description:" >> src/$project_name.c
 echo "** $project_name" >> src/$project_name.c
@@ -80,7 +81,8 @@ echo "}" >> src/$project_name.c
 
 echo "Writing in Header file..."
 echo "/*" > include/$project_name.h
-echo "** PROJECT, 2022" >> include/$project_name.h
+echo -n "** PROJECT," >> include/$project_name.h
+date +" %d %m %Y" >> include/$project_name.h
 echo "** $project_name.h" >> include/$project_name.h
 echo "** File description:" >> include/$project_name.h
 echo "** $project_name" >> include/$project_name.h
@@ -89,7 +91,7 @@ echo >> include/$project_name.h
 echo "#ifndef $project_name" >> include/$project_name.h
 echo "#define $project_name" >> include/$project_name.h
 echo >> include/$project_name.h
-echo "#endif /* ! $project_name */" >> include/$project_name.h
+echo "#endif /*!$project_name*/" >> include/$project_name.h
 
 return
 }
@@ -97,7 +99,8 @@ return
 function packing_java { #fonction de remplissage du fichier Java
 echo "Writing in java file..."
 echo "/*" > src/$project_name.java
-echo "** PROJECT, 2022" >> src/$project_name.java
+echo "** PROJECT," >> src/$project_name.java
+date +" %d %m %Y" >> src/$project_name.java
 echo "** $project_name.java" >> src/$project_name.java
 echo "** File description:" >> src/$project_name.java
 echo "** $project_name" >> src/$project_name.java
