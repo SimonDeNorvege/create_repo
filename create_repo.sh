@@ -28,8 +28,10 @@ fi
 Comment
 
 function packing_makefile { #fonction de remplissage de Makefile 
+
 echo "##" > Makefile
-echo "## PROJECT, 2022" >> Makefile
+echo -n "## PROJECT, " >> Makefile
+date +"%d %m %Y" >> Makefile
 echo "## Makefile" >> Makefile
 echo "## File description:" >> Makefile
 echo "## $project_name" >> Makefile
@@ -125,15 +127,25 @@ then
     exit 0
 fi
 
-project_name="False"
 
+
+
+
+
+
+
+# START OF THE FUNCTION
 # Pull the folder from the git
+
+project_name=project_name
 
 if ! [ -z "$1" ] # if there is no project name, the program will only do the bare minimum
 then
-    project_name=$1
+    project_name=$1    
 fi
 
+mkdir "$project_name"
+cd $project_name
 # echo "le premier arguent est : [$1]"
 
 if [ "$project_name" != "False" ] 
